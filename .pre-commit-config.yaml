@@ -1,0 +1,16 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+  - repo: local
+    hooks:
+      - id: bsl-check
+        name: BSL Language Server
+        entry: python tools/scripts/check_bsl.py
+        language: system
+        files: \.(bsl|os)$
