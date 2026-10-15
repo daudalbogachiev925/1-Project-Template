@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+STAGED=$(git diff --cached --name-only | grep -E '\.(bsl|os)$' || true)
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+echo "Running BSL Language Server checks..."
+bsl-language-server analyze --src src --reporter json --output bsl-report.json || true
+
+python tools/scripts/check_bsl.py bsl-report.json || exit 1
+echo "Pre-commit OK"
