@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+echo "Running tests before push..."
+python tools/scripts/run_tests.py || exit 1
+echo "Pre-push OK"
