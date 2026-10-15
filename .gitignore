@@ -1,0 +1,14 @@
+ib/
+out/
+*.cf
+*.cfe
+*.epf
+*.erf
+*.log
+.vscode/
+.idea/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
