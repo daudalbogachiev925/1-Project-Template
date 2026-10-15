@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  sonar:
+    runs-on: [self-hosted, windows, onec]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: SonarQube Scanner
+        run: |
+          sonar-scanner.bat ^
+            -Dsonar.projectKey=${{ github.repository }} ^
+            -Dsonar.sources=src ^
+            -Dsonar.host.url=${{ secrets.SONAR_URL }} ^
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+  build:
+    runs-on: [self-hosted, windows, onec]
+    needs: sonar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build EDT project
+        shell: cmd
+        run: |
+          call tools\scripts\build.bat src\configuration out\cf
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cf-package
+          path: out/cf
