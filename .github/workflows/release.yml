@@ -1,0 +1,18 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    runs-on: [self-hosted, windows, onec]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: python tools/scripts/build.py --src src/configuration --out out/cf
+      - name: Package
+        run: 7z a onec-release.zip out/cf/*
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: onec-release.zip
